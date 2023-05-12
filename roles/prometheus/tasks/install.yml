@@ -4,6 +4,8 @@
     name: prometheus
     system: true
     state: present
+  when:
+    - not prometheus_skip_install
 
 - name: Create prometheus system user
   ansible.builtin.user:
@@ -13,6 +15,8 @@
     group: prometheus
     createhome: false
     home: "{{ prometheus_db_dir }}"
+  when:
+    - not prometheus_skip_install
 
 - name: Create prometheus data directory
   ansible.builtin.file:
