@@ -77,6 +77,8 @@
     mode: 0755
     owner: root
     group: root
+  when:
+    - not prometheus_skip_install
   with_items:
     - prometheus
     - promtool
@@ -90,25 +92,11 @@
     mode: 0644
     owner: root
     group: root
+  when:
+    - not prometheus_skip_install
   with_items:
     - console_libraries
     - consoles
-  notify:
-    - restart prometheus
-
-- name: Propagate locally distributed prometheus and promtool binaries
-  ansible.builtin.copy:
-    src: "{{ prometheus_binary_local_dir }}/{{ item }}"
-    dest: "{{ _prometheus_binary_install_dir }}/{{ item }}"
-    mode: 0755
-    owner: root
-    group: root
-  with_items:
-    - prometheus
-    - promtool
-  when:
-    - prometheus_binary_local_dir | length > 0
-    - not prometheus_skip_install
   notify:
     - restart prometheus
 
